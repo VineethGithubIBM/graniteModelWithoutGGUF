@@ -37,7 +37,7 @@ base_model: ibm/granite-7b-base
 
 ### Method
 
-LAB: **L**arge-scale **A**lignment for chat**B**ots is a novel synthetic data-based alignment tuning method for LLMs from IBM Research. Merlinite-7b is a Mistral-7b-derivative model trained with the LAB methodology, using Mixtral-8x7b-Instruct as a teacher model.
+LAB: **L**arge-scale **A**lignment for chat**B**ots is a novel synthetic data-based alignment tuning method for LLMs from IBM Research. Granite-7b-lab is a Granite-7b-base derivative model trained with the LAB methodology, using Mixtral-8x7b-Instruct as a teacher model.
 
 LAB consists of three key components:
 
