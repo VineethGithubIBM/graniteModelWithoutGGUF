@@ -1,59 +1,95 @@
 ---
+pipeline_tag: text-generation
+tags:
+- granite
+- ibm
+- lab
+- labrador
+- labradorite
 license: apache-2.0
+language:
+- en
+base_model: ibm/granite-7b-base
 ---
 
-**Model Name**: Granite-7b-base
+### Overview
 
-**License**: Apache-2.0
+![Screenshot 2024-02-22 at 11.26.13 AM.png](Model%20Card%20for%20Merlinite%207b%2028cc0b72cf574a4a828140d3539ede4a/Screenshot_2024-02-22_at_11.26.13_AM.png)
 
-**Languages**: Primarily English
+### Performance
 
-**Architecture**: The model architecture is a replica of Meta’s Llama2-7B base variant with MHA, trained with 1M batch size on 2T tokens.
+| Model | Alignment | Base | Teacher | MTBench (Avg) * | 
+| --- | --- | --- | --- | --- | 
+| [Llama-2-13b-chat-hf](https://huggingface.co/meta-llama/Llama-2-13b-chat-hf) | RLHF | Llama-2-13b | Human Annotators | 6.65  | 
+| [Orca-2-13b](https://huggingface.co/microsoft/Orca-2-13b) | Progressive Training | Llama-2-13b | GPT-4 | 6.15  | 
+| [WizardLM-13B-V1.2](https://huggingface.co/WizardLM/WizardLM-13B-V1.2) | Evol-Instruct | Llama-2-13b | GPT-4 | 7.20  | 
+| [Labradorite-13b](https://huggingface.co/ibm/labradorite-13b) | Large-scale Alignment for chatBots (LAB) | Llama-2-13b | Mixtral-8x7B-Instruct | 7.23 | 
+| [Mistral-7B-Instruct-v0.1](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1) | SFT | Mistral-7B-v0.1 | - | 6.84 | 
+| [zephyr-7b-beta](https://huggingface.co/HuggingFaceH4/zephyr-7b-beta) | SFT/DPO | Mistral-7B-v0.1 | GPT-4 | 7.34 | 
+| [Mistral-7B-Instruct-v0.2](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2) | SFT | Mistral-7B-v0.1 | - | 7.6** | 
+| [Merlinite-7b-lab](https://huggingface.co/instructlab/merlinite-7b-lab) | Large-scale Alignment for chatBots (LAB) | Mistral-7B-v0.1 | Mixtral-8x7B-Instruct | 7.66 |  
+| Granite-7b-lab | Large-scale Alignment for chatBots (LAB) | Granite-7b-base| Mixtral-8x7B-Instruct | 6.69 |
 
-**Context Length**: 4k tokens
+[*] Numbers for models other than Merlinite-7b-lab, Granite-7b-lab and [Labradorite-13b](https://huggingface.co/ibm/labradorite-13b) are taken from [lmsys/chatbot-arena-leaderboard](https://huggingface.co/spaces/lmsys/chatbot-arena-leaderboard)
 
-**Tokenizer**: Llama2
+[**] Numbers taken from [MistralAI Release Blog](https://mistral.ai/news/la-plateforme/)
 
-**Model Developers**: IBM Research
+### Method
 
-Representing IBM’s commitment to open source innovation IBM has released granite-7b-base, a base pre-trained LLM from IBM’s Granite model series, under an apache-2.0 license for community and commercial use. Granite-7b-base was pre-trained from scratch on IBM-curated data as an open reference implementation of Meta’s Llama-2-7B. In a commitment to data transparency and fostering open innovation, the data sources, sampling proportions, and URLs for access are provided below.
+LAB: **L**arge-scale **A**lignment for chat**B**ots is a novel synthetic data-based alignment tuning method for LLMs from IBM Research. Merlinite-7b is a Mistral-7b-derivative model trained with the LAB methodology, using Mixtral-8x7b-Instruct as a teacher model.
 
-**Pre-Training Data**
+LAB consists of three key components:
 
-The model was trained on 2T tokens, with sampling proportions designed to match the sampling distributions released in the Llama1 paper as closely as possible.
+1. Taxonomy-driven data curation process
+2. Large-scale synthetic data generator
+3. Two-phased-training with replay buffers
 
-| Dataset | Description | Sampling Proportion | URL |
-|---|---|---|---|
-|Common Crawl |Open repository of web crawl data with snapshots ranging from 2021 to 2023.| 77% | https://data.commoncrawl.org/ |
-|Github_Clean | Code data from CodeParrot covering a variety of coding languages. | 5.50% | https://huggingface.co/datasets/codeparrot/github-code-clean |
-|Wikipedia and Wikimedia| Eight Wikimedia projects (enwiki, enwikibooks, enwikinews, enwikiquote, enwikisource, enwikiversity, enwikivoyage, enwiktionary). containing extracted plain text from pages and articles.| 2% |	https://dumps.wikimedia.org |
-|USPTO |	US patents granted from 1975 to May 2023, excluding design patents.|	5%	| https://bulkdata.uspto.gov/ |
-|PubMed Central|	Biomedical and life sciences papers.|	1.75%	|https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_package/|
-|arXiv|	Over 1.8 million scientific paper pre-prints posted to arXiv. |	2.50%	| https://huggingface.co/datasets/togethercomputer/RedPajama-Data-1T |
-|StackExchange|	Anonymized set of all user-contributed content on the Stack Exchange network, a popular collection of websites centered around user-contributed questions and answers.|	1%	| https://archive.org/details/stackexchange_20221206|
-|PG19|	A repository of free e-books with focus on older works for which U.S. copyright has expired.|	0.25% |	https://github.com/google-deepmind/pg19|
-|Webhose |	Unstructured web content converted into machine-readable data feeds purchased by IBM.|	5% |	N/A |
+![Untitled](Model%20Card%20for%20Merlinite%207b%2028cc0b72cf574a4a828140d3539ede4a/Untitled.png)
 
-**Evaluation Results**
+LAB approach allows for adding new knowledge and skills, in an incremental fashion, to an already pre-trained model without suffering from catastrophic forgetting.
 
-LM-eval Harness Scores
+Taxonomy is a tree of seed examples that are used to prompt a teacher model to generate synthetic data. Taxonomy allows the data curator or the model designer to easily specify a diverse set of the knowledge-domains and skills that they would like to include in their LLM. At a high level, these can be categorized into three high-level bins - knowledge, foundational skills, and compositional skills. The leaf nodes of the taxonomy are tasks associated with one or more seed examples.
 
-|Evaluation metric|	Llama2-7B (baseline) |	Granite-7b-base|
-|---|---|---|
-|MMLU (zero shot)| 0.41 |	0.43|
-|MMLU (5-shot weighted avg)|	0.47 |	0.50|
-|Arc challenge|	0.46 |	0.44|
-|Arc easy|	0.74|	0.71|
-|Boolq|	0.78 |	0.76 |
-|Copa |	0.87 |	0.83 |
-|Hellaswag|	0.76 |	0.74|
-|Openbookqa|	0.44|	0.42|
-|Piqa|	0.79|	0.79|
-|Sciq|	0.91|	0.91|
-|Winogrande|	0.69|	0.67|
-|Truthfulqa|	0.39|	0.39|
-|GSM8k (8-shot)|	0.13|	0.11|
+![Untitled](Model%20Card%20for%20Merlinite%207b%2028cc0b72cf574a4a828140d3539ede4a/Untitled%201.png)
+
+During the synthetic data generation, **unlike previous approaches where seed examples are uniformly drawn from the entire pool (i.e. self-instruct), we use the taxonomy to drive the sampling process**: For each knowledge/skill, we only use the local examples within the leaf node as seeds to prompt the teacher model.
+This makes the teacher model better exploit the task distributions defined by the local examples of each node and the diversity in the taxonomy itself ensures the entire generation covers a wide range of tasks, as illustrated below. In turns, this allows for using Mixtral 8x7B as the teacher model for generation while performing very competitively with models such as ORCA-2, WizardLM, and Zephyr Beta that rely on synthetic data generated by much larger and capable models like GPT-4.
+
+![intuition.png](Model%20Card%20for%20Merlinite%207b%2028cc0b72cf574a4a828140d3539ede4a/intuition.png)
+
+For adding new domain-specific knowledge, we provide an external knowledge source (document) and prompt the model to generate questions and answers based on the document.
+Foundational skills such as reasoning and compositional skills such as creative writing are generated through in-context learning using the seed examples from the taxonomy. 
+
+Additionally, to ensure the data is high-quality and safe, we employ steps to check the questions and answers to ensure that they are grounded and safe. This is done using the same teacher model that generated the data. 
+
+Our training consists of two major phases: knowledge tuning and skills tuning. 
+There are two steps in knowledge tuning where the first step learns simple knowledge (short samples) and the second step learns complicated knowledge (longer samples).
+The second step uses replay a replay buffer with data from the first step.
+Both foundational skills and compositional skills are learned during the skills tuning phases, where a replay buffer of data from the knowledge phase is used.
+Importantly, we use a set of hyper-parameters for training that are very different from standard small-scale supervised fine-training: larger batch size and carefully optimized learning rate and scheduler.
+
+![Untitled](Model%20Card%20for%20Merlinite%207b%2028cc0b72cf574a4a828140d3539ede4a/Untitled%202.png)
+
+## Model description
+- **Model Name**: Granite-7b-lab
+- **Language(s):** Primarily English
+- **License:** Apache 2.0
+- **Base model:** [ibm/granite-7b-base](https://huggingface.co/ibm/granite-7b-base)
+- **Teacher Model:** [mistralai/Mixtral-8x7B-Instruct-v0.1](https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1)
+
+## Prompt Template
+
+```python
+sys_prompt = "You are an AI language model developed by IBM Research. You are a cautious assistant. You carefully follow instructions. You are helpful and harmless and you follow ethical guidelines and promote positive behavior."
+
+prompt = f'<|system|>\n{sys_prompt}\n<|user|>\n{inputs}\n<|assistant|>\n'
+stop_token = '<|endoftext|>'
+```
+
+We advise utilizing the system prompt employed during the model's training for optimal inference performance, as there could be performance variations based on the provided instructions. 
+
+
 
 **Bias, Risks, and Limitations**
 
-Granite-7b-base is a base model and has not undergone any safety alignment, there it may produce problematic outputs. In the absence of adequate safeguards and RLHF, there exists a risk of malicious utilization of these models for generating disinformation or harmful content. Caution is urged against complete reliance on a specific language model for crucial decisions or impactful information, as preventing these models from fabricating content is not straightforward. Additionally, it remains uncertain whether smaller models might exhibit increased susceptibility to hallucination in ungrounded generation scenarios due to their reduced sizes and memorization capacities. This aspect is currently an active area of research, and we anticipate more rigorous exploration, comprehension, and mitigations in this domain.
+Granite-7b-lab is a base model and has not undergone any safety alignment, there it may produce problematic outputs. In the absence of adequate safeguards and RLHF, there exists a risk of malicious utilization of these models for generating disinformation or harmful content. Caution is urged against complete reliance on a specific language model for crucial decisions or impactful information, as preventing these models from fabricating content is not straightforward. Additionally, it remains uncertain whether smaller models might exhibit increased susceptibility to hallucination in ungrounded generation scenarios due to their reduced sizes and memorization capacities. This aspect is currently an active area of research, and we anticipate more rigorous exploration, comprehension, and mitigations in this domain.
