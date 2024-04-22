@@ -19,17 +19,17 @@ base_model: ibm/granite-7b-base
 
 ### Performance
 
-| Model | Alignment | Base | Teacher | MTBench (Avg) * | 
-| --- | --- | --- | --- | --- | 
-| [Llama-2-13b-chat-hf](https://huggingface.co/meta-llama/Llama-2-13b-chat-hf) | RLHF | Llama-2-13b | Human Annotators | 6.65  | 
-| [Orca-2-13b](https://huggingface.co/microsoft/Orca-2-13b) | Progressive Training | Llama-2-13b | GPT-4 | 6.15  | 
-| [WizardLM-13B-V1.2](https://huggingface.co/WizardLM/WizardLM-13B-V1.2) | Evol-Instruct | Llama-2-13b | GPT-4 | 7.20  | 
-| [Labradorite-13b](https://huggingface.co/ibm/labradorite-13b) | Large-scale Alignment for chatBots (LAB) | Llama-2-13b | Mixtral-8x7B-Instruct | 7.23 | 
-| [Mistral-7B-Instruct-v0.1](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1) | SFT | Mistral-7B-v0.1 | - | 6.84 | 
-| [zephyr-7b-beta](https://huggingface.co/HuggingFaceH4/zephyr-7b-beta) | SFT/DPO | Mistral-7B-v0.1 | GPT-4 | 7.34 | 
-| [Mistral-7B-Instruct-v0.2](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2) | SFT | Mistral-7B-v0.1 | - | 7.6** | 
-| [Merlinite-7b-lab](https://huggingface.co/instructlab/merlinite-7b-lab) | Large-scale Alignment for chatBots (LAB) | Mistral-7B-v0.1 | Mixtral-8x7B-Instruct | 7.66 |  
-| Granite-7b-lab | Large-scale Alignment for chatBots (LAB) | Granite-7b-base| Mixtral-8x7B-Instruct | 6.69 |
+| Model | Alignment | Base | Teacher | MTBench (Avg) * | MMLU(5-shot) |
+| --- | --- | --- | --- | --- | --- |
+| [Llama-2-13b-chat-hf](https://huggingface.co/meta-llama/Llama-2-13b-chat-hf) | RLHF | Llama-2-13b | Human Annotators | 6.65  |54.58 | 
+| [Orca-2-13b](https://huggingface.co/microsoft/Orca-2-13b) | Progressive Training | Llama-2-13b | GPT-4 | 6.15  | 60.37 * |
+| [WizardLM-13B-V1.2](https://huggingface.co/WizardLM/WizardLM-13B-V1.2) | Evol-Instruct | Llama-2-13b | GPT-4 | 7.20  | 54.83 |
+| [Labradorite-13b](https://huggingface.co/ibm/labradorite-13b) | Large-scale Alignment for chatBots (LAB) | Llama-2-13b | Mixtral-8x7B-Instruct | 7.23 | 58.89 |
+| [Mistral-7B-Instruct-v0.1](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1) | SFT | Mistral-7B-v0.1 | - | 6.84 | 60.37 |
+| [zephyr-7b-beta](https://huggingface.co/HuggingFaceH4/zephyr-7b-beta) | SFT/DPO | Mistral-7B-v0.1 | GPT-4 | 7.34 | 61.07 |
+| [Mistral-7B-Instruct-v0.2](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2) | SFT | Mistral-7B-v0.1 | - |  7.6** | 60.78 | 
+| [Merlinite-7b-lab](https://huggingface.co/instructlab/merlinite-7b-lab) | Large-scale Alignment for chatBots (LAB) | Mistral-7B-v0.1 | Mixtral-8x7B-Instruct | 7.66 |64.88 |  
+| Granite-7b-lab | Large-scale Alignment for chatBots (LAB) | Granite-7b-base| Mixtral-8x7B-Instruct | 6.69 | 51.91 |
 
 [*] Numbers for models other than Merlinite-7b-lab, Granite-7b-lab and [Labradorite-13b](https://huggingface.co/ibm/labradorite-13b) are taken from [lmsys/chatbot-arena-leaderboard](https://huggingface.co/spaces/lmsys/chatbot-arena-leaderboard)
 
