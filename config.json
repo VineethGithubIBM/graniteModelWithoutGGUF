@@ -1,6 +1,6 @@
 {
   "architectures": [
-    "MistralForCausalLM"
+    "LlamaForCausalLM"
   ],
   "attention_bias": false,
   "attention_dropout": 0.0,
